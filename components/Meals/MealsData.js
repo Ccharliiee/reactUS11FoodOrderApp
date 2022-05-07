@@ -1,11 +1,13 @@
 import React from "react";
 import styles from "./MealsData.module.css";
+import Card from "../UI/Card";
+import MealDataComponent from "./MealDataComponent/MealDataComponent";
 
 const MealsData = () => {
   const DUMMY_MealsData = [
     {
       id: "m1",
-      name: "TunaSushi",
+      name: "Tuna Sushi",
       description: "Finest fish and veggies",
       price: 22.99,
     },
@@ -28,10 +30,19 @@ const MealsData = () => {
       price: 18.99,
     },
   ];
-  const mealList = DUMMY_MealsData.map((meal) => <li>{meal.name}</li>);
+  const mealList = DUMMY_MealsData.map((meal) => (
+    <MealDataComponent
+      key={meal.id}
+      name={meal.name}
+      description={meal.description}
+      price={meal.price}
+    />
+  ));
   return (
     <section className={styles.meals}>
-      <ul>{mealList}</ul>
+      <Card>
+        <ul>{mealList}</ul>
+      </Card>
     </section>
   );
 };
