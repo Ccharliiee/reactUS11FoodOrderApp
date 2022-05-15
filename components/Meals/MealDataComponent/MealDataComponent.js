@@ -11,7 +11,7 @@ const MealDataComponent = (props) => {
         <div className={styles.price}>{price}</div>
       </div>
       <div>
-        <MealDataForm />
+        <MealDataForm id={props.id} />
       </div>
     </li>
   );
