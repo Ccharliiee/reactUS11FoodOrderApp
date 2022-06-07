@@ -31,6 +31,28 @@ const cartDataReducer = (state, action) => {
       totalPrice: updatedtotalPrice,
     };
   }
+  if (action.type === "RM_ITEM") {
+    const existingItemIndex = state.items.findIndex(
+      (item) => item.id === action.id
+    );
+    const existingIteminCart = state.items[existingItemIndex];
+    const updatedtotalPrice = state.totalPrice - existingIteminCart.price;
+    let updatedItems;
+    if (existingIteminCart.amount > 1) {
+      const updatedItem = {
+        ...existingIteminCart,
+        amount: existingIteminCart.amount - 1,
+      };
+      updatedItems = [...state.items];
+      updatedItems[existingItemIndex] = updatedItem;
+    } else {
+      updatedItems = state.items.filter((item) => item.id !== action.id);
+    }
+    return {
+      items: updatedItems,
+      totalPrice: updatedtotalPrice,
+    };
+  }
   return CartInitData;
 };
 
@@ -42,7 +64,9 @@ const CartContextProvider = (props) => {
   const addItem2CartHandler = (item) => {
     dispatchCartAction({ type: "ADD_ITEM", item: item });
   };
-  const removeItem2CartHandler = (id) => {};
+  const removeItem2CartHandler = (id) => {
+    dispatchCartAction({ type: "RM_ITEM", id: id });
+  };
   const CartContextData = {
     items: cartState.items,
     totalPrice: cartState.totalPrice,
