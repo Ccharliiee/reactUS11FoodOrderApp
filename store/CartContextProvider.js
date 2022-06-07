@@ -3,17 +3,32 @@ import { useReducer } from "react";
 
 const CartInitData = {
   items: [],
-  totalAmount: 0,
+  totalPrice: 0,
 };
 
 const cartDataReducer = (state, action) => {
   if (action.type === "ADD_ITEM") {
-    const NewItems = state.items.concat(action.item);
-    const NewtotalAmount =
-      state.totalAmount + action.item.amount * action.item.price;
+    const updatedtotalPrice =
+      state.totalPrice + action.item.amount * action.item.price;
+    const existingItemIndex = state.items.findIndex(
+      (item) => item.id === action.item.id
+    );
+    const existingIteminCart = state.items[existingItemIndex];
+    let updatedItems;
+    if (existingIteminCart) {
+      const updatedItem = {
+        ...existingIteminCart,
+        amount: existingIteminCart.amount + action.item.amount,
+      };
+      updatedItems = [...state.items];
+      updatedItems[existingItemIndex] = updatedItem;
+    } else {
+      updatedItems = state.items.concat(action.item);
+    }
+
     return {
-      items: NewItems,
-      totalAmount: NewtotalAmount,
+      items: updatedItems,
+      totalPrice: updatedtotalPrice,
     };
   }
   return CartInitData;
@@ -30,7 +45,7 @@ const CartContextProvider = (props) => {
   const removeItem2CartHandler = (id) => {};
   const CartContextData = {
     items: cartState.items,
-    totalAmount: cartState.totalAmount,
+    totalPrice: cartState.totalPrice,
     addItem: addItem2CartHandler,
     removeItem: removeItem2CartHandler,
   };
